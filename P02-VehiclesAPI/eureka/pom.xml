@@ -13,10 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>eureka</name>
 	<description>Eureka server project project for Spring Boot</description>
-<!--	<properties>-->
-<!--		<java.version>11</java.version>-->
-<!--		<spring-cloud.version>2021.0.5</spring-cloud.version>-->
-<!--	</properties>-->
+
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
