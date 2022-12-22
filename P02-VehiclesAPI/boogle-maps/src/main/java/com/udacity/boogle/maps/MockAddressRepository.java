@@ -1,14 +1,28 @@
 package com.udacity.boogle.maps;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Implements a mock repository for generating a random address.
+ * We will keep track of lat and long, and use it as key to map
+ * the concat of lat + long to a random address
  */
 class MockAddressRepository {
+
+    public static Map<String, Address> addressMap = new HashMap<>();
+
+    static Address getAddress(Double lat, Double lon){
+
+        String addressKey = lat.toString().concat(lon.toString());
+        if (addressMap.containsKey(addressKey)){
+            return addressMap.get(addressKey);
+        }
+        Address address = getRandom();
+        addressMap.put(addressKey, address);
+
+        return address;
+    }
 
     /**
      * Gets a random address from the list.
