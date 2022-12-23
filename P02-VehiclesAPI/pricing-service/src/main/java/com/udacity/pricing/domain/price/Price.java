@@ -9,15 +9,15 @@ public class Price {
 
     private String currency;
     private BigDecimal price;
-    private Long vehicleId;
+    private String vehicleIdentificationNumber;
 
     public Price() {
     }
 
-    public Price(String currency, BigDecimal price, Long vehicleId) {
+    public Price(String currency, BigDecimal price, String vehicleIdentificationNumber) {
         this.currency = currency;
         this.price = price;
-        this.vehicleId = vehicleId;
+        this.vehicleIdentificationNumber = vehicleIdentificationNumber;
     }
 
     public String getCurrency() {
@@ -36,11 +36,11 @@ public class Price {
         this.price = price;
     }
 
-    public Long getVehicleId() {
-        return vehicleId;
+    public String getVehicleIdentificationNumber() {
+        return vehicleIdentificationNumber;
     }
 
-    public void setVehicleId(Long vehicleId) {
-        this.vehicleId = vehicleId;
+    public void setVehicleIdentificationNumber(String vehicleIdentificationNumber) {
+        this.vehicleIdentificationNumber = vehicleIdentificationNumber;
     }
 }

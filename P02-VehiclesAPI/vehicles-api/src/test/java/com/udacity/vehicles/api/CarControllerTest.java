@@ -7,6 +7,7 @@ import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.Details;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
+import com.udacity.vehicles.service.CarAlreadyExistsException;
 import com.udacity.vehicles.service.CarNotFoundException;
 import com.udacity.vehicles.service.CarService;
 import org.junit.Before;
@@ -84,6 +85,28 @@ public class CarControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isCreated());
+    }
+
+    /**
+     * Test the Throws exception when the vehicle Identification Number (VIN) is already registered for another car
+     * @throws Exception
+     */
+    @Test
+    public void createDuplicatedCarVINThrowsException() throws Exception {
+
+        Car car = getCar();
+        given(carService.save(any())).willThrow(CarAlreadyExistsException.class);
+
+        mvc.perform(
+                post("/cars")
+                        .content(json.write(car).getJson())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CarAlreadyExistsException))
+                .andExpect(result -> assertEquals("The Vehicle Identification Number is already registered for a car",
+                        result.getResponse().getErrorMessage()));
     }
 
     /**
@@ -193,6 +216,7 @@ public class CarControllerTest {
     private Car getCar() {
         Car car = new Car();
         car.setLocation(new Location(40.730610, -73.935242));
+        car.setVehicleIdentificationNumber("123456789ABCD");
         Details details = new Details();
         Manufacturer manufacturer = new Manufacturer(101, "Chevrolet");
         details.setManufacturer(manufacturer);

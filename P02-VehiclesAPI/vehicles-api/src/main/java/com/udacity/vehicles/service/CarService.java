@@ -64,8 +64,9 @@ public class CarService {
          * Note: The Location class file also uses @transient for the address,
          * meaning the Maps service needs to be called each time for the address.
          */
+
         Car car = carRepository.findById(id).orElseThrow(CarNotFoundException::new);
-        car.setPrice(priceClient.getPrice(car.getId()));
+        car.setPrice(priceClient.getPrice(car.getVehicleIdentificationNumber()));
         car.setLocation(mapsClient.getAddress(car.getLocation()));
 
         return car;
@@ -77,6 +78,13 @@ public class CarService {
      * @return the new/updated car is stored in the repository
      */
     public Car save(Car car) {
+
+        if (car.getVehicleIdentificationNumber() == null)
+            throw new VehicleIdNumberRequiredException();
+
+        if(carRepository.findByVehicleIdentificationNumber(car.getVehicleIdentificationNumber()) != null)
+            throw new CarAlreadyExistsException();
+
         if (car.getId() != null) {
             return carRepository.findById(car.getId())
                     .map(carToBeUpdated -> {

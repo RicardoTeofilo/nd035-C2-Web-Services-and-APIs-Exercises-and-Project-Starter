@@ -4,10 +4,9 @@ import com.udacity.pricing.domain.price.Price;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 /**
  * Implements the pricing service to get prices for each vehicle.
@@ -15,26 +14,30 @@ import java.util.stream.LongStream;
 public class PricingService {
 
     /**
-     * Holds {ID: Price} pairings (current implementation allows for 20 vehicles)
+     * Changing the logic a little here for this Mocking service.
+     * Given that the prices were not really mapping prices to a unique vehicle ID.
+     * Now we will use the String vehicleIdentificationNumber which is a unique
+     * vehicle identifier. In a real world, this call would fetch data from a trusted location
+     * like a governmental agency or official car sales database where the price could be checked.
+     * For this mocking service, we are just returning a random value and associating it with
+     * the vehicleIdentificationNumber.
      */
-    private static final Map<Long, Price> PRICES = LongStream
-            .range(1, 20)
-            .mapToObj(i -> new Price("USD", randomPrice(), i))
-            .collect(Collectors.toMap(Price::getVehicleId, p -> p));
+    private static final Map<String, Price> PRICES = new HashMap<>();
 
     /**
-     * If a valid vehicle ID, gets the price of the vehicle from the stored array.
-     * @param vehicleId ID number of the vehicle the price is requested for.
+     * If a valid vehicleIdentificationNumber ID, gets the price of the vehicle from the stored array.
+     * @param vehicleIdentificationNumber unique identifier number of the vehicle the price is requested for.
      * @return price of the requested vehicle
      * @throws PriceException vehicleID was not found
      */
-    public static Price getPrice(Long vehicleId) throws PriceException {
+    public static Price getPrice(String vehicleIdentificationNumber) throws PriceException {
 
-        if (!PRICES.containsKey(vehicleId)) {
-            throw new PriceException("Cannot find price for Vehicle " + vehicleId);
-        }
+        if (PRICES.containsKey(vehicleIdentificationNumber))
+            return PRICES.get(vehicleIdentificationNumber);
 
-        return PRICES.get(vehicleId);
+        Price newPrice = new Price("USD", randomPrice(), vehicleIdentificationNumber);
+        PRICES.put(vehicleIdentificationNumber, newPrice);
+        return newPrice;
     }
 
     /**
