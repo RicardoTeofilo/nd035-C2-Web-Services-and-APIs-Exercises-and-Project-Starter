@@ -2,6 +2,7 @@ package com.udacity.vehicles.domain.car;
 
 import com.udacity.vehicles.domain.Condition;
 import com.udacity.vehicles.domain.Location;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,6 +22,7 @@ public class Car {
     @Id
     @GeneratedValue
     private Long id;
+    @ApiModelProperty(required = true)
     @NotNull
     @Column(unique = true)
     private String vehicleIdentificationNumber;

@@ -27,7 +27,6 @@ public class ErrorController extends ResponseEntityExceptionHandler {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .filter(error -> error.getField().equals("trace"))
                 .map(error -> error.getField() + ": " + error.getDefaultMessage()).collect(
                         Collectors.toList());
 

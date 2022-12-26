@@ -47,6 +47,7 @@ Swagger UI: http://localhost:8080/swagger-ui.html
 ```json
 {
    "condition":"USED",
+   "vehicleIdentificationNumber":"123456ABC",
    "details":{
       "body":"sedan",
       "model":"Impala",
@@ -83,7 +84,8 @@ the Vehicle information to be presented
 
 ```json
 {
-   "condition":"USED",
+  "vehicleIdentificationNumber":"123456ABC", 
+  "condition":"USED",
    "details":{
       "body":"sedan",
       "model":"Impala",
