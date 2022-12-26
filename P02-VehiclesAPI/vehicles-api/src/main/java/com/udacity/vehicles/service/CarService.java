@@ -16,7 +16,6 @@ import java.util.List;
  */
 @Service
 public class CarService {
-
     private final CarRepository carRepository;
 
     @Autowired
@@ -52,6 +51,17 @@ public class CarService {
         return car;
     }
 
+    public Car findByVehicleIdentificationNumber(Car car){
+        if (car.getVehicleIdentificationNumber() == null)
+            throw new VehicleIdNumberRequiredException();
+
+        Car existingCar = carRepository.findByVehicleIdentificationNumber(car.getVehicleIdentificationNumber());
+        if(existingCar == null)
+            throw new CarNotFoundException();
+
+        return existingCar;
+    }
+
     /**
      * Either creates or updates a vehicle, based on prior existence of car
      * @param car A car object, which can be either new or existing
@@ -75,6 +85,29 @@ public class CarService {
         }
 
         return carRepository.save(car);
+    }
+
+    /**
+     * Updates a vehicle, based on prior existence of car
+     * @param car A car object, which can be either new or existing
+     * @return the updated car is stored in the repository
+     */
+    public Car update(Car car){
+
+        if (car.getVehicleIdentificationNumber() == null)
+            throw new VehicleIdNumberRequiredException();
+
+        Car existingCar = this.findByVehicleIdentificationNumber(car);
+        if(existingCar.getId() != car.getId()){
+            throw new CarAlreadyExistsException();
+        }
+
+        return carRepository.findById(car.getId())
+                .map(carToBeUpdated -> {
+                    carToBeUpdated.setDetails(car.getDetails());
+                    carToBeUpdated.setLocation(car.getLocation());
+                    return carRepository.save(carToBeUpdated);
+                }).orElseThrow(CarNotFoundException::new);
     }
 
     /**

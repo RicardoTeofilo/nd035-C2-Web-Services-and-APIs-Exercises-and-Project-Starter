@@ -80,7 +80,7 @@ class CarController {
     ResponseEntity<?> put(@PathVariable Long id, @Valid @RequestBody Car car) {
 
         car.setId(id);
-        Car updatedCar = carService.save(car);
+        Car updatedCar = carService.update(car);
         Resource<Car> carResource = assembler.toResource(updatedCar);
         return ResponseEntity.ok(carResource);
     }
